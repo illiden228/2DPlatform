@@ -1,23 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    public int Health;
-    public int MoneysCount;
-    public HealthPointsRenderer HealthPointsRenderer;
-    public MoneyRenderer MoneyRenderer;
+    public event UnityAction<int> TakeMoney; 
+
+    [SerializeField] private int _health;
+    [SerializeField] private int _moneysCount;
+    [SerializeField] private HealthPointsRenderer _healthPointsRenderer;
+    [SerializeField] private float _jumpForce;
+    [SerializeField] private float _moveSpeed;
+    [SerializeField] private Transform _isGround;
 
     private Rigidbody2D _rigidbody2D;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private bool _canMoving;
-
-    [SerializeField] private float _jumpForce;
-    [SerializeField] private float _moveSpeed;
-    [SerializeField] private Transform _isGround;
 
     private void Start()
     {
@@ -25,10 +26,10 @@ public class Player : MonoBehaviour
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _canMoving = true;
-        Health = 3;
-        for (int i = 0; i < Health; i++)
+        _health = 3;
+        for (int i = 0; i < _health; i++)
         {
-            HealthPointsRenderer.AddHealth();
+            _healthPointsRenderer.AddHealth();
         }
     }
 
@@ -76,9 +77,9 @@ public class Player : MonoBehaviour
         _animator.Play("hurt");
         Invoke("AllowMoving", 0.5f);
         _canMoving = false;
-        HealthPointsRenderer.RemoveHealth();
-        Health--;
-        if(Health <= 0)
+        _healthPointsRenderer.RemoveHealth();
+        _health--;
+        if(_health <= 0)
         {
             SceneManager.LoadScene(2);
         }
@@ -86,8 +87,8 @@ public class Player : MonoBehaviour
 
     public void GetMoney()
     {
-        MoneysCount++;
-        MoneyRenderer.WriteMoney(MoneysCount);
+        _moneysCount++;
+        TakeMoney?.Invoke(_moneysCount);
     }
 
     private void AllowMoving()

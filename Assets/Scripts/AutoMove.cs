@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class AutoMove : MonoBehaviour
 {
-    [SerializeField] private Vector3 _previousPosition;
-    [SerializeField] private Vector3 _moveTarget;
-    private SpriteRenderer _spriteRenderer;
-
     [SerializeField] private Transform _movePoint;
     [SerializeField] private float _moveSpeed;
+
+    private Vector3 _previousPosition;
+    private Vector3 _moveTarget;
+    private SpriteRenderer _spriteRenderer;
 
     private void Start()
     {

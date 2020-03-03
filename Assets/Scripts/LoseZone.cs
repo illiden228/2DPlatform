@@ -7,6 +7,10 @@ public class LoseZone : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        SceneManager.LoadScene(2);
+        var player = collision.gameObject.GetComponent<Player>();
+        if (player != null)
+        {
+            SceneManager.LoadScene(2);
+        }
     }
 }
